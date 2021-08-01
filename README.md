@@ -31,6 +31,19 @@ Monitoring/Logs:
 - Prometheus
 - Node Exporter
 
-Hope this can help someone!
-
 You will need to create a persistent data directory folder for each application and in some cases (ex. Traefik and Nextcloud) you will need a yaml configuration file and/or an environment variables yaml.
+
+# **Traefik Setup**
+
+First, create a directory for your Traefik container:
+
+mkdir -p /yourdirectoryto/traefik
+
+Create the data folder and config files for Traefik:
+
+mkdir -p /yourdirectoryto/traefik/data
+touch /yourdirectoryto/traefik/data/acme.json
+chmod 600 /yourdirectoryto/traefik/data/acme.json
+touch /yourdirectoryto/traefik/data/config.yml
+
+Hope this can help someone!
