@@ -43,6 +43,7 @@ services:
       - /your/directory/path/plex:/config
       - /your/directory/path/Downloads/plex_tmp:/transcode
       - /your/directory/path/shared:/shared
+## Add the line below to mount a specific folder/drive ##      
       - /your/hdd0/path:/media/hdd0
       - /your/hdd1/path:/media/hdd1
     ports:
