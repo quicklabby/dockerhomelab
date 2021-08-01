@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   traefik:
-    image: traefik:latest (a specific version image recommended, instead of latest)
+    image: traefik:latest (a specific version image is recommended, instead of latest)
     container_name: traefik
     restart: always
     security_opt:
@@ -21,8 +21,7 @@ services:
       - ./data/.htpasswd:/.htpasswd:ro ##File generated for user:generatedhashkey##
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.traefik.rule=Host(`yourdomain.com`)"
-      - "traefik.http.middlewares.traefik-auth.basicauth.users=user:generatedhashkey"
+      - "traefik.http.routers.traefik.rule=Host(`yourdomain.com`)" 
       - "traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.traefik.middlewares=traefik-https-redirect"
       - "traefik.http.routers.traefik-secure.entrypoints=https"
@@ -31,6 +30,8 @@ services:
       - "traefik.http.routers.traefik-secure.tls=true"
       - "traefik.http.routers.traefik-secure.tls.certresolver=http"
       - "traefik.http.routers.traefik-secure.service=api@internal"
+## The line below is not needed if you will implement Authelia## 
+      - "traefik.http.middlewares.traefik-auth.basicauth.users=user:generatedhashkey"
 ## Add the line below ONLY if you want to run Authelia with Traefik ##      
       - "traefik.http.routers.traefik-secure.middlewares=authelia@docker"
 
@@ -39,7 +40,7 @@ services:
     restart: always
     image: linuxserver/plex
     volumes:
-      - /your/directory/path/plexms:/config
+      - /your/directory/path/plex:/config
       - /your/directory/path/Downloads/plex_tmp:/transcode
       - /your/directory/path/shared:/shared
       - /your/hdd0/path:/media/hdd0
@@ -60,16 +61,16 @@ services:
       - PLEX_GID=1000
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.plexms.entrypoints=http"
-      - "traefik.http.routers.plexms.rule=Host(`yourdomain.com`)"
-      - "traefik.http.middlewares.plexms-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.routers.plexms.middlewares=plexms-https-redirect"
-      - "traefik.http.routers.plexms-secure.entrypoints=https"
-      - "traefik.http.routers.plexms-secure.rule=Host(`yourdomain.com`)"
-      - "traefik.http.routers.plexms-secure.tls=true"
-      - "traefik.http.routers.plexms-secure.tls.certresolver=http"
-      - "traefik.http.routers.plexms-secure.service=plexms"
-      - "traefik.http.services.plexms.loadbalancer.server.port=32400"
+      - "traefik.http.routers.plex.entrypoints=http"
+      - "traefik.http.routers.plex.rule=Host(`yourdomain.com`)"
+      - "traefik.http.middlewares.plex-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.plex.middlewares=plex-https-redirect"
+      - "traefik.http.routers.plex-secure.entrypoints=https"
+      - "traefik.http.routers.plex-secure.rule=Host(`yourdomain.com`)"
+      - "traefik.http.routers.plex-secure.tls=true"
+      - "traefik.http.routers.plex-secure.tls.certresolver=http"
+      - "traefik.http.routers.plex-secure.service=plex"
+      - "traefik.http.services.plex.loadbalancer.server.port=32400"
       - "traefik.docker.network=proxy"
     networks:
       proxy:
