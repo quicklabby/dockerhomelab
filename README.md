@@ -33,4 +33,4 @@ Monitoring/Logs:
 
 Hope this can help someone!
 
-You will need to create a persistent data directory folder for each application and in some cases (ex. Traefik and Nextcloud) you will need a configuration file and/or an environment variables.
+You will need to create a persistent data directory folder for each application and in some cases (ex. Traefik and Nextcloud) you will need a yaml configuration file and/or an environment variables yaml.
