@@ -1,6 +1,6 @@
 # **My Docker Homelab**
 
-Here you can find my working docker compose setup for different applications running on my server.
+Here you can find my working docker compose setup running on my server.
 You will need to install first docker and docker compose related to your linux distro:
 
 https://docs.docker.com/compose/install/
@@ -31,4 +31,6 @@ Monitoring/Logs:
 - Prometheus
 - Node Exporter
 
-Hope this can help someone!
+Hope this can help someone to run quickly the above applications without issues.
+
+You will need to create a persistent data directory folder for each application and in some cases (ex. Traefik and Nextcloud) you will need a configuration file/environment variables.
