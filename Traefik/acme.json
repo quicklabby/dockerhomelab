@@ -1,0 +1,5 @@
+This file needs to be empty, here is where all the SSL certificates will be stored once you will run the containers.
+Make sure to set proper permission:
+
+touch /yourtraefikdata/directory/data/acme.json
+chmod 600 /yourtraefikdata/directory/data/acme.json
