@@ -1,0 +1,80 @@
+version: "3.7"
+
+services:
+  traefik:
+    image: traefik:latest (a specific version image recommended, instead of latest)
+    container_name: traefik
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - proxy
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./data/traefik.yml:/traefik.yml:ro
+      - ./data/acme.json:/acme.json
+## The line below is not needed if you will implement Authelia##      
+      - ./data/.htpasswd:/.htpasswd:ro ##File generated for user:generatedhashkey##
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.rule=Host(`yourdomain.com`)"
+      - "traefik.http.middlewares.traefik-auth.basicauth.users=user:generatedhashkey"
+      - "traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.traefik.middlewares=traefik-https-redirect"
+      - "traefik.http.routers.traefik-secure.entrypoints=https"
+      - "traefik.http.routers.traefik-secure.rule=Host(`yourdomain.com`)"
+      - "traefik.http.routers.traefik-secure.middlewares=traefik-auth"
+      - "traefik.http.routers.traefik-secure.tls=true"
+      - "traefik.http.routers.traefik-secure.tls.certresolver=http"
+      - "traefik.http.routers.traefik-secure.service=api@internal"
+## Add the line below ONLY if you want to run Authelia with Traefik ##      
+      - "traefik.http.routers.traefik-secure.middlewares=authelia@docker"
+
+  plexms:
+    container_name: plex
+    restart: always
+    image: linuxserver/plex
+    volumes:
+      - /your/directory/path/plexms:/config
+      - /your/directory/path/Downloads/plex_tmp:/transcode
+      - /your/directory/path/shared:/shared
+      - /your/hdd0/path:/media/hdd0
+      - /your/hdd1/path:/media/hdd1
+    ports:
+      - "32400:32400/tcp"
+      - "1900:1900/udp"
+      - "3005:3005"
+      - "5353:5353/udp"
+      - "8324:8324"
+      - "32410:32410/udp"
+      - "32412:32412/udp"
+      - "32413:32413/udp"
+      - "32414:32414/udp"
+      - "32469:32469"
+    environment:
+      - PLEX_UID=1000
+      - PLEX_GID=1000
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.plexms.entrypoints=http"
+      - "traefik.http.routers.plexms.rule=Host(`yourdomain.com`)"
+      - "traefik.http.middlewares.plexms-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.plexms.middlewares=plexms-https-redirect"
+      - "traefik.http.routers.plexms-secure.entrypoints=https"
+      - "traefik.http.routers.plexms-secure.rule=Host(`yourdomain.com`)"
+      - "traefik.http.routers.plexms-secure.tls=true"
+      - "traefik.http.routers.plexms-secure.tls.certresolver=http"
+      - "traefik.http.routers.plexms-secure.service=plexms"
+      - "traefik.http.services.plexms.loadbalancer.server.port=32400"
+      - "traefik.docker.network=proxy"
+    networks:
+      proxy:
+
+networks:
+  proxy:
+    external: true
+    driver: bridge
