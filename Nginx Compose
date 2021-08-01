@@ -44,10 +44,11 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
+<span style="color: blue">### Add the lines below to tell Traefik if you want to use a local domain address ### </span>     
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.tautulli.entrypoints=http"
-      - "traefik.http.routers.tautulli.rule=Host(`tautulli.server.ln`)"
+      - "traefik.http.routers.tautulli.rule=Host(`tautulli.local`)"
       - "traefik.docker.network=proxy"
 
   watchtower:
