@@ -47,7 +47,7 @@ services:
 ### Add the lines below ONLY if you want to tell Traefik to use a local domain address ###
       - "traefik.enable=true"
       - "traefik.http.routers.tautulli.entrypoints=http"
-      - "traefik.http.routers.tautulli.rule=Host(`tautulli.local`)"
+      - "traefik.http.routers.tautulli.rule=Host(`local.hostdomain`)"
       - "traefik.docker.network=proxy"
 
   watchtower:
