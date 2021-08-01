@@ -1,0 +1,63 @@
+version: "3.7"
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    restart: always
+    ports:
+      - "any:8000"
+    networks:
+      - proxy
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - /your/directory/path/nginx:/etc/nginx/conf.d
+      - /your/directory/path/nginx/logs/nginx:/var/log/nginx
+      - /var/www/html:/var/www/html
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nginx.entrypoints=http"
+      - "traefik.http.routers.nginx.rule=Host(`yourdomain.com`)"
+      - "traefik.http.middlewares.nginx-https-redirect.redirectscheme.scheme=https"                                                                                                              ps"
+      - "traefik.http.routers.nginx.middlewares=nginx-https-redirect"
+      - "traefik.http.routers.nginx-secure.entrypoints=https"
+      - "traefik.http.routers.nginx-secure.rule=Host(`yourdomain.com`)"
+      - "traefik.http.routers.nginx-secure.tls=true"
+      - "traefik.http.routers.nginx-secure.tls.certresolver=http"
+      - "traefik.http.routers.nginx-secure.service=nginx"
+      - "traefik.http.services.nginx.loadbalancer.server.port=chosen "any" port"
+      - "traefik.docker.network=proxy"
+
+  tautulli:
+    container_name: tautulli
+    restart: always
+    image: linuxserver/tautulli
+    networks:
+      - proxy
+    volumes:
+      - /your/directory/path/tautulli/config:/config
+      - /your/directory/path/tautulli/logs:/logs:ro
+    ports:
+      - "any:8181"
+    environment:
+      - PUID=1000
+      - PGID=1000
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.tautulli.entrypoints=http"
+      - "traefik.http.routers.tautulli.rule=Host(`tautulli.server.ln`)"
+      - "traefik.docker.network=proxy"
+
+  watchtower:
+    container_name: watchtower
+    restart: always
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --schedule "0 0 4 * * *" --cleanup
+
+networks:
+  proxy:
+    external: true
