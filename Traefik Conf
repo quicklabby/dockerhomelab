@@ -1,0 +1,44 @@
+api:
+  dashboard: true
+
+entryPoints:
+  http:
+    address: ":80"
+  https:
+    address: ":443"
+## Below to enable metrics ##    
+  metrics:
+    address: ":anyport"
+
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false
+
+certificatesResolvers:
+  http:
+    acme:
+      email: your@email
+      storage: acme.json
+      httpChallenge:
+        entryPoint: http
+
+accessLog:
+  filePath: "/your/directory/path/traefik/access.log"
+
+metrics:
+  prometheus:
+    buckets:
+      - 0.1
+      - 0.3
+      - 1.2
+      - 5.0
+
+metrics:
+  prometheus:
+    addServicesLabels: true
+    addEntryPointsLabels: true
+
+metrics:
+  prometheus:
+    entryPoint: metrics
