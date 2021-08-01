@@ -42,6 +42,9 @@ mkdir -p /yourdirectoryto/traefik
 Create the data folder and config files for Traefik:
 
 mkdir -p /yourdirectoryto/traefik/data
+
 touch /yourdirectoryto/traefik/data/acme.json
+
 chmod 600 /yourdirectoryto/traefik/data/acme.json
+
 touch /yourdirectoryto/traefik/data/config.yml
