@@ -46,4 +46,3 @@ touch /yourdirectoryto/traefik/data/acme.json
 chmod 600 /yourdirectoryto/traefik/data/acme.json
 touch /yourdirectoryto/traefik/data/config.yml
 
-Hope this can help someone!
