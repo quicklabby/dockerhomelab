@@ -32,7 +32,7 @@ services:
       - "traefik.http.routers.traefik-secure.service=api@internal"
 ## The line below is not needed if you will implement Authelia## 
       - "traefik.http.middlewares.traefik-auth.basicauth.users=user:generatedhashkey"
-## Add the line below ONLY if you want to run Authelia with Traefik ##      
+## Add the line below ONLY if you want to implement Authelia with Traefik ##      
       - "traefik.http.routers.traefik-secure.middlewares=authelia@docker"
 
   plexms:
