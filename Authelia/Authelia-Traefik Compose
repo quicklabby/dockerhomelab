@@ -12,7 +12,7 @@ services:
     environment:
       - TZ=US/Pacific
     expose:
-      - add port here
+      - 9091
     networks:
       - proxy
     labels:
