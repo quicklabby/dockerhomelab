@@ -9,7 +9,7 @@ users:
   Username:
     displayname: "Username"
     # Password is Authelia
-    password: "add here your argon password hash"
+    password: "add here your argon password hash see:https://www.authelia.com/docs/configuration/authentication/file.html"
     email: your@email
     groups:
       - admins
