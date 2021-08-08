@@ -85,7 +85,7 @@ services:
       - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
       - ./prometheus:/prometheus
     ports:
-      - 2000:9090
+      - chosen port here:9090
     restart: always
 
   exporter:
