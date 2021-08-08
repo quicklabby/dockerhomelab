@@ -10,7 +10,7 @@ services:
       - "8086:8086"
       - "2003:2003"
     environment:
-      TZ: "Asia/Tokyo"
+      TZ: "US/Pacific"
       INFLUXDB_DATA_QUERY_LOG_ENABLED: "false"
       INFLUXDB_REPORTING_DISABLED: "true"
       INFLUXDB_ADMIN_USER: "admin"
