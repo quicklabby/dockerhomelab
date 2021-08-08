@@ -1,0 +1,103 @@
+version: "3.7"
+
+services:
+  influxdb-pfsense:
+    image: "influxdb:1.7.10-alpine"
+    container_name: influxdb
+    hostname: influxdb
+    restart: always
+    ports:
+      - "8086:8086"
+      - "2003:2003"
+    environment:
+      TZ: "Asia/Tokyo"
+      INFLUXDB_DATA_QUERY_LOG_ENABLED: "false"
+      INFLUXDB_REPORTING_DISABLED: "true"
+      INFLUXDB_ADMIN_USER: "admin"
+      INFLUXDB_ADMIN_PASSWORD: "anypassword"
+      INFLUXDB_USER: "pfsense"
+      INFLUXDB_USER_PASSWORD: "anypassword"
+      INFLUXDB_DB: "pfsense"
+    volumes:
+      - /opt/containers/influxdb:/var/lib/influxdb
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100M"
+    network_mode: bridge
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    hostname: grafana
+    restart: always
+    user: "add grafana user ID"
+    environment:
+      TZ: "US/Pacific"
+      GF_INSTALL_PLUGINS: "grafana-clock-panel,grafana-simple-json-datasource,natel-plotly-panel,grafana-worldmap-panel,grafana-piechart-panel"
+      GF_PATHS_DATA: "/var/lib/grafana"
+      GF_DEFAULT_INSTANCE_NAME: "home"
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_SERVER_ENABLE_GZIP: "true"
+    ports:
+      - 3000:3000
+    volumes:
+      - /your/directory/grafana:/var/lib/grafana
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100M"
+    networks:
+      - proxy
+### Add the lines below ONLY if you want Traefik to use a local domain address ###      
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.grafana.entrypoints=http"
+      - "traefik.http.routers.grafana.rule=Host(`local.hostdomain`)"
+      - "traefik.docker.network=proxy"
+
+  unifi-controller:
+    image: linuxserver/unifi-controller
+    container_name: unifi-controller
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - MEM_LIMIT=1024M #optional
+    volumes:
+      - /your/directory/ubiquity:/config
+    ports:
+      - 3478:3478/udp
+      - 8080:8080
+      - 10001:10001/udp
+      - 8081:8081
+      - 8443:8443
+      - 8843:8843
+      - 8880:8880
+      - 6789:6789
+    restart: always
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    network_mode: bridge
+    user: "1000:1000"
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus:/prometheus
+    ports:
+      - 2000:9090
+    restart: always
+
+  exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    ports:
+      - 9100:9100
+    restart: always
+    network_mode: bridge
+    restart: always
+
+networks:
+  proxy:
+    external: true
+    driver: bridge
