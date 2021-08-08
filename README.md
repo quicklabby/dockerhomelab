@@ -7,7 +7,7 @@ https://docs.docker.com/compose/install/
 
 Devices Used:
 - Pfsense box
-- ASUS mini PC as server
+- ASUS mini PC (Server)
 - Cisco switch
 - Ubiquity AP
 
