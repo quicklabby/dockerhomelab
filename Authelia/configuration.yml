@@ -3,7 +3,7 @@
 ###############################################################
 
 host: 0.0.0.0
-port: add your compose authelia port here
+port: 9091
 log_level: debug
 #theme: dark
 # This secret can also be set using the env variables AUTHELIA_JWT_SECRET_FILE
