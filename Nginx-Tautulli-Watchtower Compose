@@ -27,7 +27,7 @@ services:
       - "traefik.http.routers.nginx-secure.tls=true"
       - "traefik.http.routers.nginx-secure.tls.certresolver=http"
       - "traefik.http.routers.nginx-secure.service=nginx"
-      - "traefik.http.services.nginx.loadbalancer.server.port=chosen "any" port"
+      - "traefik.http.services.nginx.loadbalancer.server.port=add port here"
       - "traefik.docker.network=proxy"
 
   tautulli:
@@ -44,7 +44,7 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-### Add the lines below ONLY if you want to tell Traefik to use a local domain address ###
+### Add the lines below ONLY if you want Traefik to use a local domain address ###
       - "traefik.enable=true"
       - "traefik.http.routers.tautulli.entrypoints=http"
       - "traefik.http.routers.tautulli.rule=Host(`local.hostdomain`)"
