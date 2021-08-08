@@ -16,7 +16,7 @@ services:
     image: viktorstrate/photoview:2
     restart: always
     ports:
-      - "9000:80"
+      - "add chosen port:80"
     depends_on:
       - db
 
