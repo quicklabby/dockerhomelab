@@ -19,7 +19,7 @@ services:
       INFLUXDB_USER_PASSWORD: "anypassword"
       INFLUXDB_DB: "pfsense"
     volumes:
-      - /opt/containers/influxdb:/var/lib/influxdb
+      - /your/directory/influxdb:/var/lib/influxdb
     logging:
       driver: "json-file"
       options:
