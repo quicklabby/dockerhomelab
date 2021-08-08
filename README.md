@@ -5,7 +5,7 @@ You will need to install first docker and docker compose related to your linux d
 
 https://docs.docker.com/compose/install/
 
-Devices Used:
+Hardware Used:
 - Pfsense box
 - ASUS mini PC (Server)
 - Cisco switch
