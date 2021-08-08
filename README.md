@@ -49,7 +49,7 @@ You will need to create a persistent data directory folder for each application 
 
  mkdir -p /yourdirectoryto/traefik/data
 
-3. Create the configuration files:
+3. Create the configuration files with proper permissions:
 
  touch /yourdirectoryto/traefik/data/acme.json
  
