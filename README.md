@@ -5,7 +5,13 @@ You will need to install first docker and docker compose related to your linux d
 
 https://docs.docker.com/compose/install/
 
-My current docker setup is running  a webserver behind a Traefik reverse proxy with SSL, which includes the following applications:
+Devices Used:
+- Pfsense box
+- ASUS mini PC as server
+- Cisco switch
+- Ubiquity AP
+
+My current docker setup is running a webserver behind a Traefik reverse proxy with SSL, which includes the following applications:
 
 Webserver:
 - Nginx
