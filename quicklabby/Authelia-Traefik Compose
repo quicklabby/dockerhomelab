@@ -1,0 +1,31 @@
+version: '3.7'
+
+services:
+
+  authelia:
+    image: authelia/authelia:latest
+    container_name: authelia
+    volumes:
+      - /your/directory/authelia:/var/lib/authelia
+      - /your/directory/authelia/config:/config
+      - /your/directory/authelia/config/users_database.yml:/opt/containers/authelia/config/users_database.yml
+    environment:
+      - TZ=US/Pacific
+    expose:
+      - add port here
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.authelia-secure.entrypoints=https"
+      - "traefik.http.routers.authelia-secure.rule=Host(`your.domain.com`)"
+      - "traefik.http.routers.authelia-secure.tls=true"
+      - "traefik.http.routers.authelia-secure.tls.certresolver=http"
+      - "traefik.http.middlewares.authelia.forwardauth.authResponseHeaders=Remote-User,Remote-Groups,Remote-Name,Remote-Email"
+      - "traefik.http.middlewares.authelia.forwardauth.trustForwardHeader=true"
+      - "traefik.http.middlewares.authelia.forwardAuth.address=http://authelia:9091/api/verify?rd=https://auth.explanet.xyz/"
+    restart: always
+
+networks:
+  proxy:
+    external: true
