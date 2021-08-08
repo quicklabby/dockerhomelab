@@ -1,0 +1,80 @@
+version: "3.7"
+
+services:
+  nextcloud:
+    image: nextcloud
+    env_file: /your/directory/data/config/nextcloud/nextcloud.env
+    networks:
+      - internal
+      - proxy
+    restart: always
+    ports:
+      - chosen port:80
+    depends_on:
+      - db
+      - redis
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nextcloud.entrypoints=http"
+      - "traefik.http.routers.nextcloud.rule=Host(`your.domain.com`)"
+      - "traefik.http.middlewares.nextcloud-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.nextcloud.middlewares=nextcloud-https-redirect"
+      - "traefik.http.routers.nextcloud-secure.entrypoints=https"
+      - "traefik.http.routers.nextcloud-secure.rule=Host(`your.domain.com`)"
+      - "traefik.http.middlewares.nc-rep.redirectregex.regex=https://(.*)/.well-known/(card|cal)dav"
+      - "traefik.http.middlewares.nc-rep.redirectregex.replacement=https://$$1/remote.php/dav/"
+      - "traefik.http.middlewares.nc-rep.redirectregex.permanent=true"
+      - "traefik.http.middlewares.nc-header.headers.referrerPolicy=no-referrer"
+      - "traefik.http.middlewares.nc-header.headers.stsSeconds=31536000"
+      - "traefik.http.middlewares.nc-header.headers.forceSTSHeader=true"
+      - "traefik.http.middlewares.nc-header.headers.stsPreload=true"
+      - "traefik.http.middlewares.nc-header.headers.stsIncludeSubdomains=true"
+      - "traefik.http.middlewares.nc-header.headers.browserXssFilter=true"
+      - "traefik.http.middlewares.nc-header.headers.customRequestHeaders.X-Forwarded-Proto=https"
+      - "traefik.http.routers.nextcloud-secure.middlewares=nc-rep,nc-header"
+      - "traefik.http.routers.nextcloud-secure.tls=true"
+      - "traefik.http.routers.nextcloud-secure.tls.certresolver=http"
+      - "traefik.http.routers.nextcloud-secure.service=nextcloud"
+      - "traefik.http.services.nextcloud.loadbalancer.server.port=80"
+      - "traefik.docker.network=proxy"
+    volumes:
+      - /opt/containers/data/nextcloud/html:/var/www/html
+      - /opt/containers/data/nextcloud/apps:/var/www/html/custom_apps
+      - /opt/containers/data/nextcloud/config:/var/www/html/config
+      - /opt/containers/data/nextcloud/data:/var/www/html/data  
+
+  db:
+    image: mariadb:10.5
+    restart: always
+    env_file: /your/directory/data/config/nextcloud/nextcloud.env
+    networks:
+      - internal
+    volumes:
+      - /your/directory/data/runtime/nextcloud/db:/var/lib/mysql
+
+  redis:
+    image: redis:alpine
+    restart: always
+    networks:
+      - internal
+    volumes:
+      - /your/directory/data/runtime/nextcloud/redis:/data
+
+  cron:
+    image: rcdailey/nextcloud-cronjob
+    restart: always
+    network_mode: none
+    depends_on:
+    - nextcloud
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock:ro
+    - /etc/localtime:/etc/localtime:ro
+    environment:
+    - NEXTCLOUD_CONTAINER_NAME=nextcloud
+    - NEXTCLOUD_PROJECT_NAME=nextcloud
+
+networks:
+  proxy:
+    external: true
+  internal:
+    external: false
