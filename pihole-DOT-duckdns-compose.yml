@@ -9,7 +9,7 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=US/Pacific
-      - SUBDOMAINS=xxx
+      - SUBDOMAINS=add duckdns domain here
       - TOKEN=add token here
       - LOG_FILE=false #optional
     volumes:
