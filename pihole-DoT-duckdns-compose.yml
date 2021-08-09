@@ -1,0 +1,66 @@
+version: "3.7"
+services:
+  duckdns:
+    image: ghcr.io/linuxserver/duckdns
+    container_name: duckdns
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Rome
+      - SUBDOMAINS=xxx
+      - TOKEN=add token here
+      - LOG_FILE=false #optional
+    volumes:
+      - /opt/docker/duckdns/config:/config #optional
+    restart: unless-stopped
+
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "67:67/udp"
+      - "8080:80/tcp"
+      - "4443:443/tcp"
+    environment:
+      - "TZ=Europe/Rome"
+      - "DNS1=172.30.9.2#5054"
+      - "DNS2=no"
+      - "DNSMASQ_LISTENING=all"
+    volumes:
+      - /your/directory/pihole/etc-pihole:/etc/pihole/
+      - /your/directory/pihole/etc-dnsmasq.d/:/etc/dnsmasq.d/
+    dns:
+      - 127.0.0.1
+      - 1.1.1.1
+    cap_add:
+      - NET_ADMIN
+    restart: always
+    depends_on:
+      - cloudflared
+    networks:
+      internal:
+        ipv4_address: 172.30.9.3
+
+  cloudflared:
+    container_name: cloudflared
+    restart: always
+    image: visibilityspots/cloudflared
+    networks:
+      internal:
+        ipv4_address: 172.30.9.2
+
+  watchtower:
+    container_name: watchtower
+    restart: always
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --schedule "0 0 4 * * *" --cleanup
+
+networks:
+  internal:
+    ipam:
+      config:
+        - subnet: 172.30.9.0/29
