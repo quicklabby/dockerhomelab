@@ -1,3 +1,5 @@
+##This is a working setup to run Pihole with cloudflare DoT and duckdns####
+
 version: "3.7"
 services:
   duckdns:
