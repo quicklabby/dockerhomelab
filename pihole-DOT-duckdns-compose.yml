@@ -53,14 +53,6 @@ services:
       internal:
         ipv4_address: 172.30.9.2
 
-  watchtower:
-    container_name: watchtower
-    restart: always
-    image: containrrr/watchtower
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    command: --schedule "0 0 4 * * *" --cleanup
-
 networks:
   internal:
     ipam:
