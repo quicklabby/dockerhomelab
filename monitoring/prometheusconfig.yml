@@ -26,3 +26,4 @@ scrape_configs:
     basic_auth:
       username: add username here
       password: add hash password here
+
