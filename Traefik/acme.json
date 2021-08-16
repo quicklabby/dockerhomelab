@@ -3,3 +3,4 @@ Make sure to set proper permission:
 
 touch /yourtraefikdata/directory/data/acme.json
 chmod 600 /yourtraefikdata/directory/data/acme.json
+
