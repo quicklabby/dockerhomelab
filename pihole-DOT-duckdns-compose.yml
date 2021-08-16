@@ -1,21 +1,8 @@
-##This is a working setup to run Pihole with cloudflare-DOT and duckdns####
+####################################################################
+###This is a working setup to run Pihole with cloudflare over DOT###
+####################################################################
 
 version: "3.7"
-services:
-  duckdns:
-    image: ghcr.io/linuxserver/duckdns
-    container_name: duckdns
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=US/Pacific
-      - SUBDOMAINS=add duckdns domain here
-      - TOKEN=add token here
-      - LOG_FILE=false #optional
-    volumes:
-      - /opt/docker/duckdns/config:/config #optional
-    restart: unless-stopped
-
   pihole:
     container_name: pihole
     image: pihole/pihole:latest
