@@ -29,7 +29,6 @@ services:
 
     volumes:
       - api_cache:/app/cache
-
 volumes:
   db_data:
   api_cache:
