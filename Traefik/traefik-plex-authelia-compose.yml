@@ -53,7 +53,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.authelia-secure.entrypoints=https"
-      - "traefik.http.routers.authelia-secure.rule=Host(`auth.explanet.xyz`)"
+      - "traefik.http.routers.authelia-secure.rule=Host(`your.domain.com`)"
       - "traefik.http.routers.authelia-secure.tls=true"
       - "traefik.http.routers.authelia-secure.tls.certresolver=http"
       - "traefik.http.middlewares.authelia.forwardauth.authResponseHeaders=Remote-User,Remote-Groups,Remote-Name,Remote-Email"
