@@ -1,0 +1,8 @@
+#######Add this at the end to define a specific subnet in your compose#######
+
+networks:
+  proxy:
+    driver: bridge
+    ipam:
+      config:
+      - subnet: 172.6.xx.x.
