@@ -2,7 +2,10 @@
 
 networks:
   proxy:
+    external: true
+  internal:
     driver: bridge
     ipam:
       config:
-      - subnet: 172.6.xx.x.
+      - subnet: 172.70.9.0/25
+
