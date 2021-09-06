@@ -1,5 +1,5 @@
 ####################################################################
-###This is a working setup to run Pihole with cloudflare over DOT###
+###This is a working setup to run Pihole with cloudflare over DOH###
 ####################################################################
 
 version: "3.7"
