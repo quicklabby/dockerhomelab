@@ -25,7 +25,6 @@ Media/Cloud:
 - PLEX
 - Tautulli
 - Nextcloud
-- Photoview
 
 Utilities:
 - Watchtower
