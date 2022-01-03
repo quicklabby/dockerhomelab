@@ -4,7 +4,7 @@
 
 server.host: 0.0.0.0
 server.port: 9091
-log_level: debug
+log.level: debug
 #theme: dark
 # This secret can also be set using the env variables AUTHELIA_JWT_SECRET_FILE
 jwt_secret: your jwt secret key
@@ -39,7 +39,6 @@ access_control:
     - domain: yoursub.domain.com
       policy: two_factor
 
-
 session:
   name: authelia_session
   # This secret can also be set using the env variables AUTHELIA_SESSION_SECRET_FILE
@@ -48,21 +47,19 @@ session:
   inactivity: 300  # 5 minutes
   domain: your.domain.com  # Should match whatever your root protected domain is
 
-  # redis:
-  #   host: redis
-  #   port: 6379
-  #   # This secret can also be set using the env variables AUTHELIA_SESSION_REDIS_PASSWORD_FILE
-  #   # password: authelia
+storage:
+  encryption_key: #generating a 64 key is recommended:http://www.unit-conversion.info/texttools/random-string-generator/#
+
+storage:
+  local:
+    path: /config/db.sqlite3
+  encryption_key: #generating a 64 key is recommended:http://www.unit-conversion.info/texttools/random-string-generator/#
 
 regulation:
   max_retries: 3
   find_time: 120
   ban_time: 300
-
-storage:
-  local:
-    path: /config/db.sqlite3
-
+ 
 notifier:
   smtp:
     username: your@email
