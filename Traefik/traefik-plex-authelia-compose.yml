@@ -36,7 +36,7 @@ services:
       - "traefik.http.middlewares.traefik-auth.basicauth.users=user:generatedhashkey"
 ## Add the line below ONLY if you want to implement Authelia with Traefik ##      
       - "traefik.http.routers.traefik-secure.middlewares=authelia@docker"
-## Add this lines below if you have the "Middleware authelia@docker not found" error ##    
+## Add this lines below if you have the "Middleware authelia@docker not found" error in the traefik logs ##    
       - "traefik.http.middlewares.authelia.forwardauth.authResponseHeaders=Remote-User,Remote-Groups,Remote-Name,Remote-Email"
       - "traefik.http.middlewares.authelia.forwardauth.trustForwardHeader=true"
       - "traefik.http.middlewares.authelia.forwardAuth.address=http://authelia:9091/api/verify?rd=https://yourautheliadomain.com/"
