@@ -50,7 +50,7 @@ services:
       - "traefik.http.routers.tautulli.entrypoints=http"
       - "traefik.http.routers.tautulli.rule=Host(`local.hostdomain`)"
       - "traefik.docker.network=proxy"
-### Add the lines below if you want Traefik to use a your address with SSL wildcard ###
+### Add the lines below if you want Traefik to use a your address with SSL wildcard certificate ###
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.tautulli-secure.entrypoints=https"
