@@ -29,17 +29,3 @@ certificatesResolvers:
         resolvers:
           - "1.1.1.1:53"
           - "1.0.0.1:53"
-
-accessLog:
-  filePath: "/opt/containers/traefik/data/access.log"
-  format: json
-  fields:
-    defaultMode: keep
-    names:
-      ClientUsername: drop
-    headers:
-      defaultMode: keep
-      names:
-          User-Agent: redact
-          Authorization: drop
-          Content-Type: keep
