@@ -17,13 +17,10 @@ scrape_configs:
     static_configs:
       - targets: ['hostlocalipaddress:9100']
 
-  - job_name: 'traefik'
-    scrape_interval: 15s
+  - job_name: "cadvisor"
+    scrape_interval: 10s
     scrape_timeout: 10s
-    scheme: http
     static_configs:
-            - targets: ['your.traefikdomain.com:2000']
-    basic_auth:
-      username: add username here
-      password: add hash password here
+      - targets: ['hostlocalipaddress:9200']
+
 
