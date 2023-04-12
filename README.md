@@ -38,19 +38,21 @@ Monitoring/Logs:
 
 You will need to create a persistent data directory folder for each application and in some cases (ex. Traefik and Nextcloud) a yaml configuration file and/or an environment variables yaml.
 
+------------------------
+
 # **Traefik Setup**
 
 1. Create a directory for your Traefik container:
 
- mkdir -p /yourdirectoryto/traefik
+```mkdir -p /yourdirectoryto/traefik```
 
 2. Create the data folder for Traefik:
 
- mkdir -p /yourdirectoryto/traefik/data
+```mkdir -p /yourdirectoryto/traefik/data```
 
 3. Create the configuration files with proper permission:
 
- touch /yourdirectoryto/traefik/data/acme.json
+```touch /yourdirectoryto/traefik/data/acme.json```
  
  chmod 600 /yourdirectoryto/traefik/data/acme.json
  
