@@ -1,4 +1,4 @@
-# **My Docker Homelab**
+# **Docker Compose Homelab**
 
 Here you can find my working docker compose setup running on my server.
 You will need to install first docker and docker compose related to your linux distro:
