@@ -54,7 +54,7 @@ You will need to create a persistent data directory folder for each application 
 
 ```touch /yourdirectoryto/traefik/data/acme.json```
  
- chmod 600 /yourdirectoryto/traefik/data/acme.json
+```chmod 600 /yourdirectoryto/traefik/data/acme.json```
  
- touch /yourdirectoryto/traefik/data/config.yml
+```touch /yourdirectoryto/traefik/data/config.yml```
 
