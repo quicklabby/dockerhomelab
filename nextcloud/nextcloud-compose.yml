@@ -44,7 +44,7 @@ services:
       - /opt/containers/data/nextcloud/data:/var/www/html/data  
 
   db:
-    image: mariadb:10.5
+    image: mariadb:10.6
     restart: always
     env_file: /your/directory/data/config/nextcloud/nextcloud.env
     networks:
