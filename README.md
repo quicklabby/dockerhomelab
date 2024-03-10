@@ -1,7 +1,7 @@
 # **Docker Compose Homelab**
 
 Here you can find my working docker compose setup running on my server.
-You will need to install first docker and docker compose related to your linux distro:
+Prior to utilization, it is necessary to install Docker and Docker Compose tailored to your Linux distribution. For installation guidance, please refer to the following documentation: 
 
 https://docs.docker.com/compose/install/
 
@@ -11,7 +11,7 @@ Hardware Used:
 - Cisco switch
 - Ubiquity AP
 
-My current docker setup is running a webserver behind a Traefik reverse proxy with SSL, which includes the following applications:
+The present configuration of my Docker setup entails hosting a web server behind a Traefik reverse proxy secured with SSL, encompassing the subsequent applications:
 
 Webserver:
 - Nginx
@@ -36,7 +36,7 @@ Monitoring/Logs:
 - Prometheus
 - Node Exporter
 
-You will need to create a persistent data directory folder for each application and in some cases (ex. Traefik and Nextcloud) a yaml configuration file and/or an environment variables yaml.
+To ensure proper functioning, it is necessary to establish a persistent data directory folder for each application. Additionally, for certain cases such as Traefik and Nextcloud, you may need to create a YAML configuration file and/or an environment variables YAML file.
 
 ------------------------
 
