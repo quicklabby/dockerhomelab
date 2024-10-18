@@ -6,7 +6,8 @@ Prior to utilization, it is necessary to install Docker and Docker Compose tailo
 https://docs.docker.com/compose/install/
 
 Ubuntu Bash script installation with the option to restore a previously backed-up directory:
-https://github.com/quicklabby/dockerhomelab/blob/main/docker-ubuntu-install.sh
+
+```docker-ubuntu-install.sh```
 
 Hardware Used:
 - Pfsense box
