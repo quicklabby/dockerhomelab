@@ -1,0 +1,154 @@
+services:
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    runtime: nvidia
+    restart: unless-stopped
+    environment:
+      - OLLAMA_KEEP_ALIVE=24h
+      - ENABLE_IMAGE_GENERATION=True
+      - OLLAMA_HOST=0.0.0.0:11434
+      - NVIDIA_VISIBLE_DEVICES=all
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - ./ollama:/root/.ollama
+    ports:
+      - 11434:11434
+    networks:
+      ai-local:
+
+  translate:
+    container_name: whisper-libretranslate
+    image: libretranslate/libretranslate:latest-cuda
+    restart: unless-stopped
+    volumes:
+      - ./whishper_libretranslate/libretranslate/data:/home/libretranslate/.local/share
+      - ./whishper_libretranslate/libretranslate/cache:/home/libretranslate/.local/cache
+    tty: true
+    environment:
+      LT_DISABLE_WEB_UI: True
+      LT_LOAD_ONLY: ${LT_LOAD_ONLY:-en,fr,it}
+      LT_UPDATE_MODELS: True
+    expose:
+      - 5000
+    networks:
+      ai-local:
+        aliases:
+          - translate
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            count: 1
+            capabilities: [gpu]
+
+  whishper:
+    pull_policy: always
+    image: pluja/whishper:${WHISHPER_VERSION:-latest-gpu}
+    volumes:
+      - ./whishper_data/uploads:/app/uploads
+      - ./whishper_data/logs:/var/log/whishper
+    container_name: whishper
+    restart: unless-stopped
+    ports:
+      - 8082:80
+    depends_on:
+      - translate
+    environment:
+      PUBLIC_INTERNAL_API_HOST: "http://127.0.0.1:80"
+      PUBLIC_TRANSLATION_API_HOST: ""
+      PUBLIC_API_HOST: ${WHISHPER_HOST:-}
+      PUBLIC_WHISHPER_PROFILE: gpu
+      WHISPER_MODELS_DIR: /app/models
+      UPLOAD_DIR: /app/uploads
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            count: 1
+            capabilities: [gpu]
+    networks:
+      ai-local:
+
+  wyoming-piper:  
+    image: slackr31337/wyoming-piper-gpu:latest  
+    container_name: wyoming-piper
+    environment:  
+      - PIPER_VOICE=en_US-amy-medium
+    ports:  
+      - 10200:10200
+    volumes:
+      - ./piper-models/en:/models
+    restart: unless-stopped
+    runtime: nvidia
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    networks:
+      ai-local:
+
+
+  faster-whisper:
+    image: lscr.io/linuxserver/faster-whisper:latest
+    container_name: faster-whisper
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - WHISPER_MODEL=tiny-int8
+      - WHISPER_BEAM=1 #optional
+      - WHISPER_LANG=en #optional
+    ports:
+      - 10300:10300
+    volumes:
+      - ./wyoming-whisper:/models
+    networks:
+      ai-local:
+
+
+  anythingllm:
+    image: mintplexlabs/anythingllm:latest
+    container_name: anythingllm
+    ports:
+      - "3001:3001"
+    cap_add:
+      - SYS_ADMIN
+    environment:
+      - STORAGE_DIR=/app/server/storage     
+      - JWT_SECRET="edsfdcffsdfdf" ## add your preferred secret key
+      - LLM_PROVIDER=ollama
+      - OLLAMA_BASE_PATH=http://127.0.0.1:11434 ## add your Ollama IP server
+      - OLLAMA_MODEL_PREF=gemma3 ## choose the LLM model you prefer
+      - OLLAMA_MODEL_TOKEN_LIMIT=4096
+      - EMBEDDING_ENGINE=ollama
+      - EMBEDDING_BASE_PATH=http://127.0.0.1:11434 ## add your Ollama IP server
+      - EMBEDDING_MODEL_PREF=nomic-embed-text:latest
+      - EMBEDDING_MODEL_MAX_CHUNK_LENGTH=8192
+      - VECTOR_DB=lancedb
+      - WHISPER_PROVIDER=local
+      - TTS_PROVIDER=native
+      - PASSWORDMINCHAR=8
+    volumes:
+      - ./anythingllm:/app/server/storage
+    restart: unless-stopped
+    networks:
+      ai-local:
+volumes:
+  anythingllm_storage:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./anythingllm
+
+networks:
+  ai-local:
+    driver: bridge
