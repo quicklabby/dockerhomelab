@@ -2,6 +2,12 @@
 ###Complete setup for Pi-hole with DNS-over-TLS, OpenVPN-AS, and Watchtower for auto-updates###
 ###############################################################################################
 
+### For Pihole issue with Ubuntu/Debian distro when starting container:failed to bind host port 53/tcp: address already in use:
+#Do the following steps:
+# sudo vim /etc/systemd/resolved.conf
+# Uncomment and change DNSStubListener=yes to no
+# restart the service: sudo service systemd-resolved restart
+
 services:
   pihole:
     container_name: pihole
