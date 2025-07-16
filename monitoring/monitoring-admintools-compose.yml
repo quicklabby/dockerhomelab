@@ -56,26 +56,6 @@ services:
       - "traefik.http.routers.grafana.rule=Host(`local.hostdomain`)"
       - "traefik.docker.network=proxy"
 
-  unifi-controller:
-    image: linuxserver/unifi-controller
-    container_name: unifi-controller
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - MEM_LIMIT=1024M #optional
-    volumes:
-      - /your/directory/ubiquity:/config
-    ports:
-      - 3478:3478/udp
-      - 8080:8080
-      - 10001:10001/udp
-      - 8081:8081
-      - 8443:8443
-      - 8843:8843
-      - 8880:8880
-      - 6789:6789
-    restart: always
-
   prometheus:
     image: prom/prometheus
     container_name: prometheus
