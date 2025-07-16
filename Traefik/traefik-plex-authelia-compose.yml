@@ -1,5 +1,3 @@
-version: "3.7"
-
 services:
   traefik:
     image: traefik:latest (a specific version image is recommended, instead of latest)
