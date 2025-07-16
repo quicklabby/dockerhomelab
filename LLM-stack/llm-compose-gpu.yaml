@@ -16,8 +16,9 @@ services:
       - ./ollama:/root/.ollama
     ports:
       - 11434:11434
-    networks:
+    networks: 
       ai-local:
+        ipv4_address: 172.30.9.2
 
   translate:
     container_name: whisper-libretranslate
@@ -121,12 +122,14 @@ services:
       - SYS_ADMIN
     environment:
       - STORAGE_DIR=/app/server/storage     
-      - OLLAMA_BASE_PATH=http://127.0.0.1:11434 ## add your Ollama IP server
+      - OLLAMA_BASE_PATH=http://172.30.9.2:11434
     volumes:
       - ./anythingllm:/app/server/storage
     restart: unless-stopped
-    networks:
+    networks: 
       ai-local:
+        ipv4_address: 172.30.9.3
+
 
   searxng:
     container_name: searxng
@@ -138,7 +141,7 @@ services:
       - ./searxng:/etc/searxng:rw
       - ./searxng/searxng-data:/var/cache/searxng:rw
     environment:
-      - SEARXNG_BASE_URL=https://${SEARXNG_HOSTNAME:-localhost}/
+      - SEARXNG_BASE_URL=https://${SEARXNG_HOSTNAME:-localhost}/ #add your hostname if you have one
     logging:
       driver: "json-file"
       options:
@@ -146,7 +149,13 @@ services:
         max-file: "1"
     networks:
       ai-local:
+        ipv4_address: 172.30.9.4
+
 
 networks:
   ai-local:
     driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.9.0/29
+
