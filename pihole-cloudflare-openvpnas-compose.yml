@@ -2,7 +2,7 @@
 ###Complete setup for Pi-hole with DNS-over-TLS, OpenVPN-AS, and Watchtower for auto-updates###
 ###############################################################################################
 
-version: "3.7"
+services:
   pihole:
     container_name: pihole
     image: pihole/pihole:latest
