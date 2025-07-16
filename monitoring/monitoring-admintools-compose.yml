@@ -1,5 +1,3 @@
-version: "3.7"
-
 services:
   influxdb-pfsense:
     image: "influxdb:1.7.10-alpine"
