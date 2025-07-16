@@ -7,7 +7,6 @@ services:
     restart: unless-stopped
     environment:
       - OLLAMA_KEEP_ALIVE=24h
-      - ENABLE_IMAGE_GENERATION=True
       - OLLAMA_HOST=0.0.0.0:11434
       - NVIDIA_VISIBLE_DEVICES=all
     volumes:
