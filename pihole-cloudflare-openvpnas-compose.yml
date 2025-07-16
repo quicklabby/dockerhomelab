@@ -73,6 +73,8 @@ version: "3.7"
     volumes:
       - /your/directory/openvpn:/openvpn
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true 
     deploy:
       resources:
         limits:
