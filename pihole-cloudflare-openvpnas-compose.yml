@@ -28,6 +28,13 @@ version: "3.7"
     restart: always
     depends_on:
       - cloudflared
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          memory: 150M
+          cpus: '0.4'
     networks:
       internal:
         ipv4_address: 172.30.9.3
@@ -36,9 +43,52 @@ version: "3.7"
     container_name: cloudflared
     restart: always
     image: visibilityspots/cloudflared
+    deploy:
+      resources:
+        limits:
+          memory: 50M
+          cpus: '0.2'
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "dig", "@127.0.0.1", "-p", "5053", "cloudflare.com"]
+      interval: 30s
+      retries: 3
     networks:
       internal:
         ipv4_address: 172.30.9.2
+
+  openvpn-as:
+    image: openvpn/openvpn-as
+    container_name: openvpn-as
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - NET_ADMIN
+      - MKNOD
+    ports:
+      - 943:943
+      - 443:443
+      - 1194:1194/udp
+    volumes:
+      - /your/directory/openvpn:/openvpn
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 250M
+          cpus: '0.4'
+    networks:
+      internal:
+        ipv4_address: 172.30.9.4
+
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --cleanup --interval 86400
 
 networks:
   internal:
