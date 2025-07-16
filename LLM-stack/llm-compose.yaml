@@ -95,7 +95,6 @@ services:
     networks:
       ai-local:
 
-
   faster-whisper:
     image: lscr.io/linuxserver/faster-whisper:latest
     container_name: faster-whisper
@@ -113,7 +112,6 @@ services:
     networks:
       ai-local:
 
-
   anythingllm:
     image: mintplexlabs/anythingllm:latest
     container_name: anythingllm
@@ -123,31 +121,31 @@ services:
       - SYS_ADMIN
     environment:
       - STORAGE_DIR=/app/server/storage     
-      - JWT_SECRET="edsfdcffsdfdf" ## add your preferred secret key
-      - LLM_PROVIDER=ollama
       - OLLAMA_BASE_PATH=http://127.0.0.1:11434 ## add your Ollama IP server
-      - OLLAMA_MODEL_PREF=gemma3 ## choose the LLM model you prefer
-      - OLLAMA_MODEL_TOKEN_LIMIT=4096
-      - EMBEDDING_ENGINE=ollama
-      - EMBEDDING_BASE_PATH=http://127.0.0.1:11434 ## add your Ollama IP server
-      - EMBEDDING_MODEL_PREF=nomic-embed-text:latest
-      - EMBEDDING_MODEL_MAX_CHUNK_LENGTH=8192
-      - VECTOR_DB=lancedb
-      - WHISPER_PROVIDER=local
-      - TTS_PROVIDER=native
-      - PASSWORDMINCHAR=8
     volumes:
       - ./anythingllm:/app/server/storage
     restart: unless-stopped
     networks:
       ai-local:
-volumes:
-  anythingllm_storage:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ./anythingllm
+
+  searxng:
+    container_name: searxng
+    image: docker.io/searxng/searxng:latest
+    restart: unless-stopped
+    ports:
+      - "3002:8080"
+    volumes:
+      - ./searxng:/etc/searxng:rw
+      - ./searxng/searxng-data:/var/cache/searxng:rw
+    environment:
+      - SEARXNG_BASE_URL=https://${SEARXNG_HOSTNAME:-localhost}/
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "1"
+    networks:
+      ai-local:
 
 networks:
   ai-local:
