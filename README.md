@@ -13,7 +13,6 @@ Hardware Used:
 - Pfsense box
 - ASUS mini PC (Server)
 - Cisco switch
-- Ubiquity AP
 
 The present configuration of my Docker setup entails hosting a web server behind a Traefik reverse proxy secured with SSL, encompassing the subsequent applications:
 
@@ -32,7 +31,6 @@ Media/Cloud:
 
 Utilities:
 - Watchtower
-- Ubiquity Unifi Controller
 
 Monitoring/Logs:
 - InfluxDB
