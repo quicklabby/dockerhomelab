@@ -37,6 +37,7 @@ AI Tools:
 - Anything LLM
 - Whisper
 - Piper
+- whisper-libretranslate
 
 Monitoring/Logs:
 - InfluxDB
