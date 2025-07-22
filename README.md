@@ -31,6 +31,7 @@ Media/Cloud:
 
 Utilities:
 - Watchtower
+- Ollama (LLM stack)
 
 Monitoring/Logs:
 - InfluxDB
