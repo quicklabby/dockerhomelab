@@ -31,7 +31,12 @@ Media/Cloud:
 
 Utilities:
 - Watchtower
-- Ollama (LLM stack)
+
+AI Tools:
+- Ollama
+- Anything LLM
+- Whisper
+- Piper
 
 Monitoring/Logs:
 - InfluxDB
