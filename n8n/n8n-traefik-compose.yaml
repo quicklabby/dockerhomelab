@@ -64,3 +64,11 @@ services:
     volumes:
       - /your/n8n/directory:/home/node/.n8n
       - /your/n8n/local-files:/files
+
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --cleanup --interval 86400
