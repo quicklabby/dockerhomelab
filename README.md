@@ -31,6 +31,7 @@ Media/Cloud:
 
 Utilities:
 - Watchtower
+- n8n
 
 AI Tools:
 - Ollama
