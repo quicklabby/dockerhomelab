@@ -150,6 +150,14 @@ services:
       ai-local:
         ipv4_address: 172.30.9.4
 
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --cleanup --interval 86400
+
 
 networks:
   ai-local:
