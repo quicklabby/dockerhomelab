@@ -61,6 +61,8 @@ services:
       - GENERIC_TIMEZONE=${GENERIC_TIMEZONE}
       - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
       - N8N_RUNNERS_ENABLED=true
+      - N8N_BLOCK_ENV_ACCESS_IN_NODE=false
+      - DB_SQLITE_POOL_SIZE=5
     volumes:
       - /your/n8n/directory:/home/node/.n8n
       - /your/n8n/local-files:/files
