@@ -64,6 +64,7 @@ services:
       - N8N_BLOCK_ENV_ACCESS_IN_NODE=false
       - DB_SQLITE_POOL_SIZE=5
       - N8N_DIAGNOSTICS_ENABLED=false
+      - N8N_GIT_NODE_DISABLE_BARE_REPOS=true
     volumes:
       - /your/n8n/directory:/home/node/.n8n
       - /your/n8n/local-files:/files
