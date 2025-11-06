@@ -38,6 +38,7 @@ services:
   faster-whisper:
     image: lscr.io/linuxserver/faster-whisper:latest
     container_name: faster-whisper
+    restart: unless-stopped
     environment:
       - PUID=1000
       - PGID=1000
