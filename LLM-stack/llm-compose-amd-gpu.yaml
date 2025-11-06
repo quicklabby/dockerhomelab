@@ -1,0 +1,75 @@
+services:
+
+  wyoming-piper_en: #English Language
+    image: rhasspy/wyoming-piper:latest
+    container_name: wyoming-piper-en
+    command: --voice en_US-amy-medium --data-dir /models
+    ports:
+      - 10200:10200
+    volumes:
+      - /opt/database/llm/piper-models/en:/models
+    restart: unless-stopped
+    environment:
+      - AMD_VISIBLE_DEVICES=all
+    devices:
+      - /dev/kfd
+      - /dev/dri
+    security_opt:
+      - seccomp=unconfined
+
+  wyoming-piper_it: #Italian Language
+    image: rhasspy/wyoming-piper:latest
+    container_name: wyoming-piper-it
+    command: --voice it_IT-paola-medium --data-dir /models
+    ports:
+      - 10201:10200
+    volumes:
+      - /llm/piper-models/it:/models
+    restart: unless-stopped
+    devices:
+      - /dev/kfd
+      - /dev/dri
+    security_opt:
+      - seccomp=unconfined
+    environment:
+      - AMD_VISIBLE_DEVICES=all
+
+
+  faster-whisper:
+    image: lscr.io/linuxserver/faster-whisper:latest
+    container_name: faster-whisper
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Rome
+      - WHISPER_MODEL=small-int8
+      - WHISPER_BEAM=1
+      - AMD_VISIBLE_DEVICES=all
+    devices:
+      - /dev/kfd
+      - /dev/dri
+    security_opt:
+      - seccomp=unconfined
+    ports:
+      - 10300:10300
+    volumes:
+      - /llm/wyoming-whisper:/models
+
+
+  anythingllm:
+    image: mintplexlabs/anythingllm:latest
+    container_name: anythingllm
+    ports:
+      - 3001:3001
+    cap_add:
+      - SYS_ADMIN
+    environment:
+      - STORAGE_DIR=/app/server/storage
+      - OLLAMA_BASE_PATH=http://0.0.0.0:11434
+    volumes:
+      - /llm/anythingllm:/app/server/storage
+      - /llm/anythingllm/.env:/app/server/.env
+    restart: unless-stopped
+
+networks:
+  ai-local:
