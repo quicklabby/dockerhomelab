@@ -1,0 +1,55 @@
+services:
+  frigate:
+    container_name: frigate
+    privileged: true
+    restart: unless-stopped
+    stop_grace_period: 30s
+    image: ghcr.io/blakeblackshear/frigate:stable-rocm
+    shm_size: "1gb"
+    devices:
+      - /dev/dri
+      - /dev/kfd
+    environment:
+      - LIBVA_DRIVER_NAME=radeonsi
+      - GENERIC_TIMEZONE=Asia/Tokyo
+      - HSA_OVERRIDE_GFX_VERSION=11.0.0
+    security_opt:
+      - apparmor=unconfined
+      - systempaths=unconfined
+    networks:
+      - n8n_default
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./frigate/config:/config
+      - ./frigate:/media/frigate
+      - ./frigate/models:/models
+      - type: tmpfs
+        target: /tmp/cache
+        tmpfs:
+          size: 1000000000
+    ports:
+      - "8971:8971"
+      - "5000:5000"
+      - "8554:8554"
+      - "8555:8555/tcp"
+      - "8555:8555/udp"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.frigate.rule=Host(`frigate.domain.com`)
+      - traefik.http.routers.frigate.tls=true
+      - traefik.http.routers.frigate.entrypoints=web,websecure
+      - traefik.http.routers.frigate.tls.certresolver=mydnschallenge
+      - traefik.http.middlewares.frigate.headers.SSLRedirect=true
+      - traefik.http.middlewares.frigate.headers.STSSeconds=315360000
+      - traefik.http.middlewares.frigate.headers.browserXSSFilter=true
+      - traefik.http.middlewares.frigate.headers.contentTypeNosniff=true
+      - traefik.http.middlewares.frigate.headers.forceSTSHeader=true
+      - traefik.http.middlewares.frigate.headers.SSLHost=(`frigate.domain.com`)
+      - traefik.http.middlewares.frigate.headers.STSIncludeSubdomains=true
+      - traefik.http.middlewares.frigate.headers.STSPreload=true
+      - traefik.http.routers.frigate.middlewares=frigate@docker
+      - traefik.http.services.frigate.loadbalancer.server.port=8971
+
+networks:
+  n8n_default:
+    external: true
