@@ -1,4 +1,4 @@
-# Config with CPU enabled
+# Config with CPU enabled and person detection only
 
 ffmpeg:
   hwaccel_args: [] # preset-vaapi
