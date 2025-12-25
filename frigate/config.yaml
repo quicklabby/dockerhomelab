@@ -1,0 +1,230 @@
+# Config with CPU enabled
+
+ffmpeg:
+  hwaccel_args: [] # preset-vaapi
+
+#detectors:
+#  amd:
+#    type: onnx
+
+#model:
+#  path: /config/model_cache/yolox_tiny.onnx
+#  model_type: yolo-generic
+#  width: 416
+#  height: 416
+#  input_tensor: nchw
+#  input_dtype: float
+#  labelmap_path: /labelmap/coco-80.txt
+
+detectors:
+  cpu:
+    type: cpu
+    num_threads: 3
+
+mqtt:
+  enabled: true
+  host: #mqtt ip address
+  port: 1883
+  user: #mqtt-user
+  password: #Mqttpass
+
+tls:
+  enabled: false
+
+detect:
+  enabled: true
+  fps: 5
+
+objects:
+  track:
+    - person
+
+go2rtc:
+  streams:
+    audio_room:
+      - rtsp://admin:password@192.168.x.x/cam/realmonitor?channel=1&subtype=00
+    audio_room_sub:
+      - rtsp://admin:password@192.168.x.x/cam/realmonitor?channel=1&subtype=01
+    living_room:
+      - rtsp://admin:password@192.168.x.x/cam/realmonitor?channel=1&subtype=00
+    living_room_sub:
+      - rtsp://admin:password@192.168.x.x/cam/realmonitor?channel=1&subtype=01
+    hallway:
+      - rtsp://admin:password@192.168.x.x/cam/realmonitor?channel=1&subtype=00
+    hallway_sub:
+      - rtsp://admin:password@192.168.x.x/cam/realmonitor?channel=1&subtype=01
+
+
+cameras:
+  audio_room:
+    enabled: true
+    ffmpeg:
+      inputs:
+        - path: rtsp://127.0.0.1:8554/audio_room_sub
+          input_args: preset-rtsp-restream
+          roles:
+            - detect
+        - path: rtsp://127.0.0.1:8554/audio_room
+          input_args: preset-rtsp-restream
+          roles:
+            - record
+      output_args:
+        record: preset-record-generic-audio-copy
+    notifications:
+      enabled: true
+
+    detect:
+      enabled: true
+      width: 640
+      height: 360
+      fps: 5
+
+    onvif:
+      host: 192.168.x.x
+      port: 80
+      user: admin
+      password: password
+
+    record:
+      enabled: True
+      retain:
+        days: 3
+        mode: motion
+      alerts:
+        retain:
+          days: 3
+          mode: active_objects
+      detections:
+        retain:
+          days: 3
+          mode: active_objects
+
+    snapshots:
+      enabled: true
+      timestamp: true
+      bounding_box: true
+      retain:
+        default: 2
+
+    motion:
+      threshold: 30
+      contour_area: 10
+      improve_contrast: true
+
+
+  living_room:
+    enabled: true
+    ffmpeg:
+      inputs:
+        - path: rtsp://127.0.0.1:8554/living_room_sub
+          input_args: preset-rtsp-restream
+          roles:
+            - detect
+        - path: rtsp://127.0.0.1:8554/living_room
+          input_args: preset-rtsp-restream
+          roles:
+            - record
+      output_args:
+        record: preset-record-generic-audio-copy
+    notifications:
+      enabled: true
+
+    detect:
+      enabled: true
+      width: 640
+      height: 360
+      fps: 5
+
+    onvif:
+      host: 192.168.x.x
+      port: 80
+      user: admin
+      password: password
+      ignore_time_mismatch: true
+
+    record:
+      enabled: True
+      retain:
+        days: 3
+        mode: motion
+      alerts:
+        retain:
+          days: 3
+          mode: active_objects
+      detections:
+        retain:
+          days: 3
+          mode: active_objects
+
+    snapshots:
+      enabled: true
+      timestamp: true
+      bounding_box: true
+      retain:
+        default: 2
+
+    motion:
+      threshold: 30
+      contour_area: 10
+      improve_contrast: true
+
+  hallway:
+    enabled: true
+    ffmpeg:
+      inputs:
+        - path: rtsp://127.0.0.1:8554/hallway_sub
+          input_args: preset-rtsp-restream
+          roles:
+            - detect
+        - path: rtsp://127.0.0.1:8554/hallway
+          input_args: preset-rtsp-restream
+          roles:
+            - record
+      output_args:
+        record: preset-record-generic-audio-copy
+    notifications:
+      enabled: true
+
+    detect:
+      enabled: true
+      width: 640
+      height: 360
+      fps: 5
+
+    onvif:
+      host: 192.168.x.x
+      port: 80
+      user: admin
+      password: password
+      ignore_time_mismatch: true
+
+    record:
+      enabled: True
+      retain:
+        days: 3
+        mode: motion
+      alerts:
+        retain:
+          days: 3
+          mode: active_objects
+      detections:
+        retain:
+          days: 3
+          mode: active_objects
+
+    snapshots:
+      enabled: true
+      timestamp: true
+      bounding_box: true
+      retain:
+        default: 2
+
+    motion:
+      threshold: 30
+      contour_area: 10
+      improve_contrast: true
+
+
+version: 0.16-0
+notifications:
+  enabled: true
