@@ -77,3 +77,8 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     command: --cleanup --interval 86400
+
+networks:
+  n8n_default:
+    external: true
+
